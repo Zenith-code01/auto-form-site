@@ -10,6 +10,7 @@ export default function HomePage() {
   const { language, toggleLanguage } = useLanguage()
   const [email, setEmail] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const startHref = email ? '/dashboard' : '/login?next=/dashboard'
   const text = {
     en: {
       title: 'Automatic Form Filling System',
@@ -100,7 +101,7 @@ export default function HomePage() {
           )}
 
           <Link
-            href="/dashboard"
+            href={startHref}
             className="px-5 py-3 rounded-xl bg-gray-200 hover:bg-gray-300"
           >
             {text.start}

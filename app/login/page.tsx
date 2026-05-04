@@ -6,6 +6,24 @@ import LanguageToggle from '@/src/components/LanguageToggle'
 import { useLanguage } from '@/src/lib/use-language'
 import { isAdminEmailAllowed } from '@/src/lib/admin'
 
+const DEFAULT_REDIRECT_PATH = '/dashboard'
+
+function getSafeNextPath() {
+  const nextPath = new URLSearchParams(window.location.search).get('next')
+
+  if (!nextPath || !nextPath.startsWith('/') || nextPath.startsWith('//')) {
+    return DEFAULT_REDIRECT_PATH
+  }
+
+  return nextPath
+}
+
+function getSiteOrigin() {
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, '')
+
+  return configuredUrl || window.location.origin
+}
+
 export default function LoginPage() {
   const { language, toggleLanguage } = useLanguage()
   const [email, setEmail] = useState('')
@@ -80,7 +98,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email: normalizedEmail,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: `${getSiteOrigin()}${getSafeNextPath()}`,
       },
     })
 

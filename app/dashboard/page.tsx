@@ -160,14 +160,14 @@ export default function DashboardPage() {
             const { user, isAdmin } = await getCurrentAdminUser()
 
             if (!user) {
-                router.push('/login')
+                router.push('/login?next=/dashboard')
                 return
             }
 
             if (!isAdmin) {
                 alert(language === 'zh' ? '此账号不是管理员。' : 'This account is not authorized as an administrator.')
                 await supabase.auth.signOut()
-                router.push('/login')
+                router.push('/login?next=/dashboard')
                 return
             }
 
